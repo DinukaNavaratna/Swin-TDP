@@ -1,0 +1,341 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+    <title>Principal Dashboard</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+    <link rel="stylesheet" href="assets/css/main.css" />
+    <noscript>
+        <link rel="stylesheet" href="assets/css/noscript.css" />
+    </noscript>
+    <style>
+        .heading1 {
+            font-size: 20px;
+            display: flex;
+        }
+
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin: 0 auto;
+        }
+
+        th,
+        td {
+            border: 1px solid black;
+            padding: 8px;
+            text-align: center;
+        }
+
+        th {
+            background-color: #161414;
+            color: #fff;
+        }
+
+
+
+        body {
+            
+            /* color: #fff;
+            font-family: Arial, sans-serif; */
+            background-color: #000000;
+            color: #fff;
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        #mainProduct {
+            display: flex;
+            justify-content: space-around;
+            padding: 20px;
+             max-width: 1200px;
+            width: 100%;
+        }
+
+        #filter {
+            background-color: #1a1a1a49;
+            width: 150%;
+            padding: 20px;
+            border-radius: 20px;
+        }
+
+        #filterTitle {
+            color: #fff;
+        }
+
+        #houseTitle,
+        h3 {
+            color: #fff;
+        }
+
+        input[type="checkbox"] {
+            transform: scale(1.5);
+            margin-right: 10px;
+        }
+
+        label {
+            display: inline-block;
+            margin-bottom: 10px;
+        }
+
+        #attendance {
+            color: #ffffff;
+        }
+
+        input[type="number"] {
+            width: 150px;
+            padding: 5px;
+            margin-top: 5px;                                                       
+            border-radius: 5px;
+            color: #000000;
+        }
+
+        span {
+            color: #fff;
+            margin-right: 10px;
+        }
+
+        #priceTo {
+            margin-left: 5px;
+            
+        }
+       
+    </style>
+</head>
+
+<body class="is-preload">
+    <div id="wrapper">
+        <h1>Automated Dashboard for Social Capital Insights</h1>
+
+        <header id="header">
+            <div class="content">
+                <div class="inner">
+                    <nav>
+                        <ul>
+                            <li><a href="principal.html">Home</a></li>
+                            <li><a href="studentList.html">Student List</a></li>
+                            <li><a href="snaAnalysis.html">SNA Analysis</a></li>
+                            
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+
+        </header>
+
+         <!--Main Content-->
+    <div>     
+    <section id="mainProduct">
+
+        
+
+        <aside id="filter">
+            <section>
+
+            
+            <h2 id="filterTitle" class="contentTitle">Filters</h2>
+            
+            <div id="house">
+                <h3 id="houseTitle">House</h3>
+
+                <div>
+                    <input type="checkbox" id="vanguard" name="language[]" value="vanguard" >
+                    <label for="vanguard">Vanguard</label>
+                </div>
+
+                <div>
+                
+                    <input type="checkbox" id="griffin" name="language[]" value="griffin" >
+                    <label for="griffin">Griffin</label>
+                </div>
+
+                <div>
+
+                
+                    <input type="checkbox" id="phoenix" name="language[]" value="phoenix" >
+                    <label for="phoenix">Phoenix</label>
+                </div>
+
+                <div>
+                    <input type="checkbox" id="falcon" name="language[]" value="falcon" >
+                    <label for="falcon">Falcon</label>
+                </div>
+
+                <div>
+
+                
+                    <input type="checkbox" id="redwood" name="language[]" value="redwood" >
+                    <label for="redwood">Redwood</label>
+                </div>
+
+                <div>
+
+                
+                    <input type="checkbox" id="astral" name="language[]" value="astral" >
+                    <label for="astral">Astral</label>
+                </div>
+
+            </div>
+            
+
+            <div id="language">
+                <h3>language</h3>
+
+                <div>
+                    <input type="checkbox" id="english" name="language[]" value="english" >
+                    <label for="english">English</label>
+
+                    <input type="checkbox" id="nonEnglish" name="language[]" value="nonEnglish" >
+                    <label for="nonEnglish">Non English</label>
+                </div>
+            </div>
+
+
+           
+            <div id="attendance">
+                <h3>Attendance</h3>
+            
+                <div>
+                    <span>From:</span>
+                    <input type="number" id="fromInput" value="0%" />
+                </div>
+            
+                <div>
+                    <span id="attendanceTo">To:</span>
+                    <input type="number" id="toInput" value="100%" />
+                </div>
+            </div>
+            
+            <script>
+                const fromInput = document.getElementById('fromInput');
+                const toInput = document.getElementById('toInput');
+            
+                fromInput.addEventListener('input', function () {
+                    if (fromInput.value < 0) {
+                        fromInput.value = 0;
+                    } else if (fromInput.value > 100) {
+                        fromInput.value = 100;
+                    }
+                });
+            
+                toInput.addEventListener('input', function () {
+                    if (toInput.value < 0) {
+                        toInput.value = 0;
+                    } else if (toInput.value > 100) {
+                        toInput.value = 100;
+                    }
+                });
+            </script>
+        </section>
+        </aside>
+    </div>
+
+
+
+
+        <div>
+            
+            <table>
+                <h2>Student List</h2>
+                <tr>
+                    <th>Participant-ID</th>
+                    <th>Type</th>
+                    <th>First-Name</th>
+                    <th>Last-Name</th>
+                    <th>Email</th>
+                    <th>Contact Number</th>
+                    <th>Perc_Effort</th>
+                    <th>Attendance</th>
+                    <th>Perc_Academic</th>
+                    <th>CompleteYears</th>
+                    <th>House</th>
+                    <th>Lang</th>
+                    <th>K6</th>
+                </tr>
+
+                <tr>
+                    <td>37895</td>
+                    <td>Participant</td>
+                    <td>Rhett</td>
+                    <td>Barton</td>
+                    <td>Rhett.Barton@school.edu</td>
+                    <td>NA</td>
+                    <td>93</td>
+                    <td>89</td>
+                    <td>92</td>
+                    <td>9</td>
+                    <td>Vanguard</td>
+                    <td>1</td>
+                    <td>13</td>
+                </tr>
+                <tr>
+                    <td>37997</td>
+                    <td>Participant</td>
+                    <td>Beckett</td>
+                    <td>Powell</td>
+                    <td>Beckett.Powell@school.edu</td>
+                    <td>NA</td>
+                    <td>82</td>
+                    <td>89</td>
+                    <td>93</td>
+                    <td>4</td>
+                    <td>Vanguard</td>
+                    <td>0</td>
+                    <td>15</td>
+                </tr>
+
+                <tr>
+                    <td>37901</td>
+                    <td>Participant</td>
+                    <td>Rory</td>
+                    <td>Briggs</td>
+                    <td>Rory.Briggs@school.edu</td>
+                    <td>NA</td>
+                    <td>7</td>
+                    <td>80</td>
+                    <td>35</td>
+                    <td>9</td>
+                    <td>Griffin</td>
+                    <td>0</td>
+                    <td>13</td>
+                </tr>
+
+                <tr>
+                    <td>37901</td>
+                    <td>Participant</td>
+                    <td>Rory</td>
+                    <td>Briggs</td>
+                    <td>Rory.Briggs@school.edu</td>
+                    <td>NA</td>
+                    <td>7</td>
+                    <td>80</td>
+                    <td>35</td>
+                    <td>9</td>
+                    <td>Griffin</td>
+                    <td>0</td>
+                    <td>13</td>                
+
+                </tr>    
+            </table>
+        </div>
+        
+
+    </div>
+
+    <!-- BG -->
+    <div id="bg"></div>
+
+    <!-- Scripts -->
+    <script src="assets/js/jquery.min.js"></script>
+    <script src="assets/js/browser.min.js"></script>
+    <script src="assets/js/breakpoints.min.js"></script>
+    <script src="assets/js/util.js"></script>
+    <script src="assets/js/main.js"></script>
+
+</body>
+
+</html>

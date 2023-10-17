@@ -1,0 +1,334 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+    <title>Principal Dashboard</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+    <link rel="stylesheet" href="assets/css/main.css" />
+    <noscript>
+        <link rel="stylesheet" href="assets/css/noscript.css" />
+    </noscript>
+    <style>
+        .header {
+            font-size: 20px;
+            display: flex;
+        }
+
+
+
+
+        body {
+            
+            /* color: #fff;
+            font-family: Arial, sans-serif; */
+            background-color: #000000;
+            color: #fff;
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: left;
+            align-items: left;
+            height: 100vh;
+        }
+
+        #mainProduct {
+            display: flex;
+            justify-content: space-around;
+            padding: 20px;
+             max-width: 1200px;
+            width: 100%;
+        }
+
+        #generator {
+            background-color: #1a1a1a49;
+            width: 500%;
+            padding: 30px;
+            border-radius: 20px;
+        }
+
+        #generatorTitle {
+            color: #fff;
+        }
+
+        #houseTitle,
+        h3 {
+            color: #fff;
+        }
+
+        input[type="checkbox"] {
+            transform: scale(1.5);
+            margin-right: 10px;
+        }
+
+        label {
+            display: inline-block;
+            margin-bottom: 10px;
+        }
+
+        #attendance {
+            color: #ffffff;
+        }
+
+        input[type="number"] {
+            width: 150px;
+            padding: 5px;
+            margin-top: 5px;                                                       
+            border-radius: 5px;
+            color: #000000;
+        }
+
+        span {
+            color: #fff;
+            margin-right: 10px;
+        }
+
+        #priceTo {
+            margin-left: 5px;
+            
+        }
+
+
+        
+       
+    </style>
+</head>
+
+<body class="is-preload">
+    <div id="wrapper">
+        <h1>Automated Dashboard for Social Capital Insights</h1>
+
+        <header id="header">
+            <div class="content">
+                <div class="inner">
+                    <nav>
+                        <ul>
+                            <li><a href="principal.html">Home</a></li>
+                            <li><a href="studentList.html">Student List</a></li>
+                            <li><a href="snaAnalysis.html">SNA Analysis</a></li>
+                            
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+
+        </header>
+
+         <!--Main Content-->
+    <div>     
+    <section id="mainProduct">
+
+        
+
+        <aside id="generator">
+            <section>
+
+            
+            <h2 id="generatorTitle" class="contentTitle">SNA Generator </h2>
+            
+            <div id="individual">
+                <h3 id="individualTitle">Individual</h3>
+                
+                <div>
+                    <input type="checkbox" id="individual" name="individual" value="allInHouse">
+                    <label for="individual">Individual</label>
+                </div>
+
+                <div>
+                    <span id="studentID">Student ID:</span>
+                    <input type="number" value="37962" />
+                </div>
+            </div>    
+
+            <div id="house">
+                <h3 id="houseTitle">House</h3>
+                
+                <div>
+                    <input type="checkbox" id="allInHouse" name="allInHouse" value="allInHouse">
+                    <label for="allInHouse">All </label>
+                </div>
+
+                <div>
+                    <input type="checkbox" id="vanguard" name="language[]" value="vanguard" >
+                    <label for="vanguard">Vanguard</label>
+                </div>
+
+                <div>
+                
+                    <input type="checkbox" id="griffin" name="language[]" value="griffin" >
+                    <label for="griffin">Griffin</label>
+                </div>
+
+                <div>
+
+                
+                    <input type="checkbox" id="phoenix" name="language[]" value="phoenix" >
+                    <label for="phoenix">Phoenix</label>
+                </div>
+
+                <div>
+                    <input type="checkbox" id="falcon" name="language[]" value="falcon" >
+                    <label for="falcon">Falcon</label>
+                </div>
+
+                <div>
+
+                
+                    <input type="checkbox" id="redwood" name="language[]" value="redwood" >
+                    <label for="redwood">Redwood</label>
+                </div>
+
+                <div>
+
+                
+                    <input type="checkbox" id="astral" name="language[]" value="astral" >
+                    <label for="astral">Astral</label>
+                </div>
+
+            </div>
+            
+
+            <div id="language">
+                <h3>language</h3>
+                
+                <div>
+                    <input type="checkbox" id="allLanguage" name="allLanguage" value="allLanguage">
+                    <label for="allLanguage">All </label>
+                </div>
+
+                <div>
+                    <input type="checkbox" id="english" name="language[]" value="english" >
+                    <label for="english">English</label>
+                </div>
+
+                <div>
+                    <input type="checkbox" id="nonEnglish" name="language[]" value="nonEnglish" >
+                    <label for="nonEnglish">Non English</label>
+                </div>
+            </div>
+
+
+           
+            <div id="attendance">
+                <h3>Attendance</h3>
+            
+                <div>
+                    <span>From:</span>
+                    <input type="number" id="fromInput" value="0%" />
+                </div>
+            
+                <div>
+                    <span id="attendanceTo">To:</span>
+                    <input type="number" id="toInput" value="100%" />
+                </div>
+            </div>
+            
+            <script>
+                const fromInput = document.getElementById('fromInput');
+                const toInput = document.getElementById('toInput');
+            
+                fromInput.addEventListener('input', function () {
+                    if (fromInput.value < 0) {
+                        fromInput.value = 0;
+                    } else if (fromInput.value > 100) {
+                        fromInput.value = 100;
+                    }
+                });
+            
+                toInput.addEventListener('input', function () {
+                    if (toInput.value < 0) {
+                        toInput.value = 0;
+                    } else if (toInput.value > 100) {
+                        toInput.value = 100;
+                    }
+                });
+
+            </script>
+
+            <div id="category">
+            <h3 id="categoryTitle">Category</h3>
+
+            <div>
+                <input type="checkbox" id="allCategories" name="allCategories" value="allCategories">
+                <label for="allCategories">All </label>
+            </div>
+            
+            <div>
+                <input type="checkbox" id="academicResult" name="academicResult" value="academicResult">
+                <label for="academicResult">Academic Result</label>
+            </div>
+
+            <div>
+                <input type="checkbox" id="k6Score" name="k6Score" value="k6Score">
+                <label for="k6Score">K6 Score</label>
+            </div>
+
+            <div>
+                <input type="checkbox" id="problemStudent" name="problemStudent" value="problemStudent">
+                <label for="problemStudent">Problem Student</label>
+            </div>
+
+            <div>
+                <input type="checkbox" id="manBoxScore" name="manBoxScore" value="manBoxScore">
+                <label for="manBoxScore"> Man Box Score</label>
+            </div>
+
+            <div>
+                <input type="checkbox" id="masculinityMeasure" name="masculinityMeasure" value="masculinityMeasure">
+                <label for="masculinityMeasure">Masculinity Measure</label>
+            </div>
+
+            <div>
+                <input type="checkbox" id="schoolEngagement" name="schoolEngagement" value="schoolEngagement">
+                <label for="schoolEngagement">School Engagement</label>
+            </div>
+
+            <div>
+                <input type="checkbox" id="learningDifficulties" name="learningDifficulties" value="learningDifficulties">
+                <label for="k6Score">Learning Difficulties</label>
+            </div>
+
+
+            </div>
+
+
+             <div id="submitSection">
+                <button id="submitButton" onclick="submitForm()">Submit</button>
+            </div>
+
+        </section>
+        </aside>
+    </div>
+
+   
+    
+    <script>
+        // Add your submit function logic here
+        function submitForm() {
+            // Add your submission logic here
+            console.log("Form submitted!");
+        }
+    </script>
+
+
+
+   
+
+
+       
+        
+
+    </div>
+
+    <!-- BG -->
+    <div id="bg"></div>
+
+    <!-- Scripts -->
+    <script src="assets/js/jquery.min.js"></script>
+    <script src="assets/js/browser.min.js"></script>
+    <script src="assets/js/breakpoints.min.js"></script>
+    <script src="assets/js/util.js"></script>
+    <script src="assets/js/main.js"></script>
+
+</body>
+
+</html>
