@@ -11,7 +11,7 @@ for index in year:
     principal_year_k6.append(df3_principal.loc[df3_principal['CompleteYears'] == index, 'k6_overall'].mean())
     
 plt.bar(year, principal_year_k6)
-plt.xlabel('Year')
+plt.xlabel('Years completed in the school')
 plt.ylabel('K6 score')
 plt.title('Avearge K6 score of student')
 plt.show() # need to export to frontend

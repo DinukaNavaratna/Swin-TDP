@@ -13,7 +13,7 @@ for index in year:
     principal_survey_dashboard.append(df3_principal.loc[(df3_principal['House'] == house_html) & (df3_principal['CompleteYears'] == index), survey_score_cat_html].mean())
 
 plt.bar(year, principal_survey_dashboard)
-plt.xlabel('Year')
+plt.xlabel('Years completed in the school')
 plt.ylabel(survey_score_cat_html)
 plt.title(survey_score_cat_html + ' score of students of house ' + house_html)
 plt.show() # need to export to frontend

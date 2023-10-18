@@ -11,7 +11,7 @@ for index in year:
     principal_year_growthmindset.append(df3_principal.loc[df3_principal['CompleteYears'] == index, 'GrowthMindset'].mean())
 
 plt.bar(year, principal_year_growthmindset)
-plt.xlabel('Year')
+plt.xlabel('Years completed in the school')
 plt.ylabel('Growth Mindset score')
 plt.title('Avearge Growth Mindset score of student')
 plt.show() # need to export to frontend

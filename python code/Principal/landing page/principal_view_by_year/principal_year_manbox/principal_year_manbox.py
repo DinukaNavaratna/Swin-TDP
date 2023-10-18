@@ -11,7 +11,7 @@ for index in year:
     principal_year_manbox.append(df3_principal.loc[df3_principal['CompleteYears'] == index, 'Manbox5_overall'].mean())
 
 plt.bar(year, principal_year_manbox)
-plt.xlabel('Year')
+plt.xlabel('Years completed in the school')
 plt.ylabel('Man box score')
 plt.title('Avearge Man box score of student')
 plt.show() # need to export to frontend

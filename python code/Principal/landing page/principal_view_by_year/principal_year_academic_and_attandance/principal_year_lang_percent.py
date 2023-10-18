@@ -16,7 +16,7 @@ principal_year_lang_percent = np.transpose([principal_year_english_percent, prin
 principal_year_lang_percent_plot = pd.DataFrame(principal_year_lang_percent, columns=['English speaking', 'Non-english speaking'])
 plot = principal_year_lang_percent_plot.plot(kind='bar', stacked=True)
 plot.set_xticklabels(year, rotation=0)
-plot.set_xlabel('Year')
+plot.set_xlabel('Years completed in the school')
 plot.set_ylabel('Percentage %')
 plot.set_title('Composition of English and Non-english speaking student')
 plt.show() # need to export to frontend

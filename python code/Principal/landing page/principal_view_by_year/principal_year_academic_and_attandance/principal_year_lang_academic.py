@@ -15,7 +15,7 @@ principal_year_academic_language = np.transpose([principal_year_academic_english
 principal_year_academic_language_plot = pd.DataFrame(principal_year_academic_language, columns=['English speaking', 'Non-english speaking'])
 plot = principal_year_academic_language_plot.plot(kind='bar', stacked=False)
 plot.set_xticklabels(year, rotation=0)
-plot.set_xlabel('Year')
+plot.set_xlabel('Years completed in the school')
 plot.set_ylabel('Academic result')
 plot.set_title('Average academic result of English and Non-English speaking student')
 plt.show() # need to export to frontend
