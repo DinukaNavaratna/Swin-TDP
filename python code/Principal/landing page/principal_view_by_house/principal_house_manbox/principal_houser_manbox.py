@@ -11,7 +11,7 @@ for index in house:
     principal_house_manbox.append(df3_principal.loc[df3_principal['House'] == index, 'Manbox5_overall'].mean())
 
 plt.bar(house, principal_house_manbox)
-plt.xlabel('Year')
-plt.ylabel('Man box score')
-plt.title('Avearge Man box score of student')
+plt.xlabel('House')
+plt.ylabel('Manbox score')
+plt.title('Avearge Manbox score')
 plt.show() # need to export to frontend

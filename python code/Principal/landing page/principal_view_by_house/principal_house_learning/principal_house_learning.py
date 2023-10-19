@@ -13,5 +13,5 @@ for index in house:
 plt.bar(house, principal_house_growthmindset)
 plt.xlabel('House')
 plt.ylabel('Growth Mindset score')
-plt.title('Avearge Growth Mindset score of student')
+plt.title('Avearge Growth Mindset score')
 plt.show() # need to export to frontend

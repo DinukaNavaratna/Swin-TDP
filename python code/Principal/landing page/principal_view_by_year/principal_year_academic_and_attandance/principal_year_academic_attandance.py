@@ -19,5 +19,5 @@ plot = year_acad_n_att_plot.plot(kind='bar', stacked=False)
 plot.set_xticklabels(year, rotation=0)
 plot.set_xlabel('Years completed in the school')
 plot.set_ylabel('Academic result / attandance')
-plot.set_title('Average academic result and attandance of students of each year')
+plot.set_title('Average academic result and attandance')
 plt.show() # need to export to frontend

@@ -12,7 +12,6 @@ for index in house:
     principal_house_academic_english.append(df3_principal.loc[(df3_principal['language'] == 0) & (df3_principal['House'] == index), 'Perc_Academic'].mean())
     principal_house_academic_nonenglish.append(df3_principal.loc[(df3_principal['language'] == 1) & (df3_principal['House'] == index), 'Perc_Academic'].mean())
 
-    
 principal_house_academic_language = np.transpose([principal_house_academic_english, principal_house_academic_nonenglish])
 principal_house_academic_language_plot = pd.DataFrame(principal_house_academic_language, columns=['English speaking', 'Non-english speaking'])
 plot = principal_house_academic_language_plot.plot(kind='bar', stacked=False)

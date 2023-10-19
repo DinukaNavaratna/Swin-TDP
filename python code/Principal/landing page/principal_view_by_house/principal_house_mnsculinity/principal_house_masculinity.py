@@ -13,5 +13,5 @@ for index in house:
 plt.bar(house, principal_house_masculinity)
 plt.xlabel('House')
 plt.ylabel('Masculinity score')
-plt.title('Avearge Masculinity box score of student')
+plt.title('Avearge Masculinity box score')
 plt.show() # need to export to frontend

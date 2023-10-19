@@ -13,5 +13,5 @@ for index in year:
 plt.bar(year, principal_year_masculinity)
 plt.xlabel('Years completed in the school')
 plt.ylabel('Masculinity score')
-plt.title('Avearge Masculinity box score of student')
+plt.title('Avearge Masculinity score')
 plt.show() # need to export to frontend

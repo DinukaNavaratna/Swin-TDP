@@ -11,7 +11,7 @@ for index in house:
     principal_landing_no_of_student_by_house.append(df3_principal.loc[df3_principal['House'] == index, 'House'].count())
     
 plt.bar(house, principal_landing_no_of_student_by_house)
-plt.xlabel('Year')
+plt.xlabel('Years completed in the school')
 plt.ylabel('No. of student')
 plt.title('No. of student participated in the survey')
 plt.show() # need to export the graph to frontend

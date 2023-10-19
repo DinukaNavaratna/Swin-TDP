@@ -18,5 +18,5 @@ plot = principal_house_lang_percent_plot.plot(kind='bar', stacked=True)
 plot.set_xticklabels(house, rotation=0)
 plot.set_xlabel('House')
 plot.set_ylabel('Percentage %')
-plot.set_title('Composition of Engliah and Non-english speaking student')
+plot.set_title('Language spoken')
 plt.show() #need to export to frontend

@@ -13,5 +13,5 @@ for index in house:
 plt.bar(house, principal_house_k6_problemn)
 plt.xlabel('House')
 plt.ylabel('No. of student')
-plt.title('No. of student with K6 above boderline')
+plt.title('Student with K6 above boderline')
 plt.show() # need to export to frontend

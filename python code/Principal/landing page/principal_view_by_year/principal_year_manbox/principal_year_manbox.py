@@ -12,6 +12,6 @@ for index in year:
 
 plt.bar(year, principal_year_manbox)
 plt.xlabel('Years completed in the school')
-plt.ylabel('Man box score')
-plt.title('Avearge Man box score of student')
+plt.ylabel('Manbox score')
+plt.title('Avearge Manbox score')
 plt.show() # need to export to frontend

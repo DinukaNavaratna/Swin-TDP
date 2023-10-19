@@ -15,5 +15,5 @@ for index in year:
 plt.bar(year, principal_survey_dashboard)
 plt.xlabel('Years completed in the school')
 plt.ylabel(survey_score_cat_html)
-plt.title(survey_score_cat_html + ' score of students of house ' + house_html)
+plt.title(survey_score_cat_html + ' score of house ' + house_html)
 plt.show() # need to export to frontend

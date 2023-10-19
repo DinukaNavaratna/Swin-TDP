@@ -19,5 +19,5 @@ plot = house_acad_n_att_plot.plot(kind='bar', stacked=False)
 plot.set_xticklabels(house, rotation=0)
 plot.set_xlabel('House')
 plot.set_ylabel('Academic result / attandance')
-plot.set_title('Average academic result and attandance of student of each house')
+plot.set_title('Average academic result and attandance')
 plt.show() # need to export to frontend

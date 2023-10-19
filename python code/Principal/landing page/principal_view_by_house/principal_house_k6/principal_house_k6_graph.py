@@ -13,5 +13,5 @@ for index in house:
 plt.bar(house, principal_house_k6)
 plt.xlabel('House')
 plt.ylabel('K6 score')
-plt.title('Avearge K6 score of student')
+plt.title('Avearge K6 score')
 plt.show() # need to export to frontend

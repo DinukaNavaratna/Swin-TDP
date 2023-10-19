@@ -22,5 +22,11 @@ hard_coded_house = 'Vanguard'
 # select only 'completed'
 df3_teacher = temp_teacher_source[(temp_teacher_source['Status'].isin(['completed'])) & (temp_teacher_source['House'] == hard_coded_house)]
 
-# for teacher to select a student ID from his/her class
+
+# common variables
+
+# drop down list for teacher to select a student ID for visualization
 teacher_studentID = df3_teacher['Participant-ID']
+
+# frop down list for to select a SNA type
+sna_cat = ['net_0_Friends', 'net_1_Influential', 'net_2_Feedback', 'net_3_MoreTime', 'net_4_Advice', 'net_5_Disrespect']

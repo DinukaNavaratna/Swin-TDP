@@ -13,5 +13,5 @@ for index in year:
 plt.bar(year, principal_year_k6)
 plt.xlabel('Years completed in the school')
 plt.ylabel('K6 score')
-plt.title('Avearge K6 score of student')
+plt.title('Avearge K6 score')
 plt.show() # need to export to frontend
