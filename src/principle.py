@@ -26,16 +26,6 @@ PHP_DIR = "files/php/"
 xlsxJan = pd.ExcelFile('resources/datasets/Student Survey - Jan.xlsx')
 xlsxJuly = pd.ExcelFile('resources/datasets/Student Survey - July.xlsx')
         
-#        request_body = request.json
-#        survey = request_body["survey"]
-#        
-#        if(survey == "1"):
-#            xlsx = xlsxJan
-#            ftpSurvey = "s1/"
-#        else:
-#            xlsx = xlsxJuly
-#            ftpSurvey = "s2/"
-        
 
 class generateImages(Resource):
     def post(self):
@@ -774,6 +764,27 @@ class generateImages(Resource):
         return "success"
     
 
+def dataCleaning(survey):
+        if(survey == "1"):
+            xlsx = xlsxJan
+        else:
+            xlsx = xlsxJuly
+            
+        # survey result  
+        df = read_excel(xlsx, sheet_name='responses')
+
+        # students attributes
+        df2 = read_excel(xlsx, sheet_name='participants')
+
+        # inner merge on participant ID
+        df3 = pd.merge(df, df2, on=['Participant-ID'])
+
+        # select only 'completed'
+        df3 = df3[df3['Status'].isin(['completed'])]
+        
+        return df3, xlsx
+
+
 class dashboard(Resource):
     def post(self):
         request_body = request.json
@@ -831,26 +842,50 @@ class feedback(Resource):
             result[fake.name()] = str(list(comments)[i])
         
         return result
-        
 
-def dataCleaning(survey):      
-        if(survey == "1"):
-            xlsx = xlsxJan
-        else:
-            xlsx = xlsxJuly
+
+class y_academic(Resource):
+    def post(self):
+        request_body = request.json
+        survey = request_body["survey"]
+        
+        df, xlsx = dataCleaning(survey)
+        
+        result = {}
+        
+        #### 1.1 What is their academic result and attandance?
+        year = []
+        for i in range (11):
+            year.append(i)
+
+        yr = {}
+        for index in year:
+            yr[index] = {'attendance': (df.loc[df['CompleteYears'] == index, 'Attendance'].mean()).item(), 'academic': (df.loc[df['CompleteYears'] == index, 'Perc_Academic'].mean()).item()}
+        
+        result['academic_attendance'] = yr
+        
+        #### 1.2 Which language does they speak?
+        year = []
+        for i in range (11):
+            year.append(i)
+
+        yr = {}
+        for index in year:
+            yr[index] = {'non_english': (len(df.loc[(df['language'] == 1) & (df['CompleteYears'] == index)]) / len(df[df['CompleteYears'] == index])), 'english': (len(df.loc[(df['language'] == 0) & (df['CompleteYears'] == index)]) / len(df[df['CompleteYears'] == index]))}
+
+        result['language'] = yr
+
+        #### 1.3 Is language affecting academic result?
+        year = []
+        for i in range (11):
+            year.append(i)
             
-        # survey result  
-        df = read_excel(xlsx, sheet_name='responses')
+        yr = {}
+        for index in year:
+            yr[index] = {'non_english': (df.loc[(df['language'] == 1) & (df['CompleteYears'] == index), 'Perc_Academic'].mean()), 'english': (df.loc[(df['language'] == 0) & (df['CompleteYears'] == index), 'Perc_Academic'].mean())}
 
-        # students attributes
-        df2 = read_excel(xlsx, sheet_name='participants')
-
-        # inner merge on participant ID
-        df3 = pd.merge(df, df2, on=['Participant-ID'])
-
-        # select only 'completed'
-        df3 = df3[df3['Status'].isin(['completed'])]
-        
-        return df3, xlsx
+        result['academic_language'] = yr
+       
+        return result
 
 
