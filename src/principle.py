@@ -26,6 +26,11 @@ PHP_DIR = "files/php/"
 # data source
 xlsxJan = pd.ExcelFile('resources/datasets/Student Survey - Jan.xlsx')
 xlsxJuly = pd.ExcelFile('resources/datasets/Student Survey - July.xlsx')
+house = ['Vanguard', 'Griffin', 'Phoenix', 'Falcon', 'Redwood', 'Astral']
+year = []
+for i in range (11):
+    year.append(i)
+
         
 
 def dataCleaning(survey):
@@ -70,10 +75,6 @@ class dashboard(Resource):
         result['invited'] = len(invited)
         result['total'] = len(total)
 
-
-        year = []
-        for i in range (11):
-            year.append(i)
             
         #participation_by_year
         count = []
@@ -108,8 +109,8 @@ class feedback(Resource):
         return result
 
 
-class y_academic(Resource):
-    def post(self):
+class academic(Resource):
+    def post(self, type):
         request_body = request.json
         survey = request_body["survey"]
         
@@ -118,36 +119,39 @@ class y_academic(Resource):
         result = {}
         
         #### 1.1 What is their academic result and attandance?
-        year = []
-        for i in range (11):
-            year.append(i)
-
         yr = {}
-        for index in year:
-            yr[index] = {'attendance': (df.loc[df['CompleteYears'] == index, 'Attendance'].mean()).item(), 'results': (df.loc[df['CompleteYears'] == index, 'Perc_Academic'].mean()).item()}
         
+        if(type == "y"):
+            for index in year:
+                yr[index] = {'attendance': (df.loc[df['CompleteYears'] == index, 'Attendance'].mean()).item(), 'results': (df.loc[df['CompleteYears'] == index, 'Perc_Academic'].mean()).item()}
+        elif(type == "h"):
+            for index in house:
+                yr[index] = {'attendance': (df.loc[df['House'] == index, 'Attendance'].mean()).item(), 'results': (df.loc[df['House'] == index, 'Perc_Academic'].mean()).item()}
+            
         result['academic_attendance'] = yr
         
         #### 1.2 Which language does they speak?
-        year = []
-        for i in range (11):
-            year.append(i)
-
         yr = {}
-        for index in year:
-            yr[index] = {'non_english': (len(df.loc[(df['language'] == 1) & (df['CompleteYears'] == index)]) / len(df[df['CompleteYears'] == index])), 'english': (len(df.loc[(df['language'] == 0) & (df['CompleteYears'] == index)]) / len(df[df['CompleteYears'] == index]))}
-
+        
+        if(type == "y"):
+            for index in year:
+                yr[index] = {'non_english': (len(df.loc[(df['language'] == 1) & (df['CompleteYears'] == index)]) / len(df[df['CompleteYears'] == index])), 'english': (len(df.loc[(df['language'] == 0) & (df['CompleteYears'] == index)]) / len(df[df['CompleteYears'] == index]))}
+        elif(type == "h"):
+            for index in house:
+                yr[index] = {'non_english': (len(df.loc[(df['language'] == 1) & (df['House'] == index)]) / len(df[df['House'] == index])), 'english': (len(df.loc[(df['language'] == 0) & (df['House'] == index)]) / len(df[df['House'] == index]))}
+            
         result['language'] = yr
 
-        #### 1.3 Is language affecting academic result?
-        year = []
-        for i in range (11):
-            year.append(i)
-            
+        #### 1.3 Is language affecting academic result?            
         yr = {}
-        for index in year:
-            yr[index] = {'non_english': (df.loc[(df['language'] == 1) & (df['CompleteYears'] == index), 'Perc_Academic'].mean()), 'english': (df.loc[(df['language'] == 0) & (df['CompleteYears'] == index), 'Perc_Academic'].mean())}
-
+        
+        if(type == "y"):
+            for index in year:
+                yr[index] = {'non_english': (df.loc[(df['language'] == 1) & (df['CompleteYears'] == index), 'Perc_Academic'].mean()), 'english': (df.loc[(df['language'] == 0) & (df['CompleteYears'] == index), 'Perc_Academic'].mean())}
+        elif(type == "h"):
+            for index in house:
+                yr[index] = {'non_english': (df.loc[(df['language'] == 1) & (df['House'] == index), 'Perc_Academic'].mean()), 'english': (df.loc[(df['language'] == 0) & (df['House'] == index), 'Perc_Academic'].mean())}
+            
         result['academic_language'] = yr
         
         resultstring = json.dumps(result)
@@ -158,8 +162,8 @@ class y_academic(Resource):
         return result
 
 
-class y_k6(Resource):
-    def post(self):
+class k6(Resource):
+    def post(self, type):
         try:
             request_body = request.json
             survey = request_body["survey"]
@@ -168,44 +172,52 @@ class y_k6(Resource):
             
             result = {}
             
-            year = []
-            for i in range (11):
-                year.append(i)
-
             k6 = []
-            for index in year:
-                k6.append(df.loc[df['CompleteYears'] == index, 'k6_overall'].mean())
             
-            result['k6'] = {"year":year, "k6":k6}
+            if(type == "y"):
+                for index in year:
+                    k6.append(df.loc[df['CompleteYears'] == index, 'k6_overall'].mean())
+                result['k6'] = {"year":year, "k6":k6}
+            elif(type == "h"):
+                for index in house:
+                    k6.append(df.loc[df['House'] == index, 'k6_overall'].mean())
+                result['k6'] = {"year":house, "k6":k6}                
             
             #### 2.1 How many 'problem' students?
-            year = []
-            for i in range (11):
-                year.append(i)
-
             k6_problem = []
-            for index in year:
-                k6_problem.append((df.loc[(df['CompleteYears'] == index) & (df['k6_overall'] >= 16), 'k6_overall'].count()).item())
-
-            result['k6_problem'] = {"year":year, "k6_problem":k6_problem}
+            
+            if(type == "y"):
+                for index in year:
+                    k6_problem.append((df.loc[(df['CompleteYears'] == index) & (df['k6_overall'] >= 16), 'k6_overall'].count()).item())
+                result['k6_problem'] = {"year":year, "k6_problem":k6_problem}
+            elif(type == "h"):
+                for index in house:
+                    k6_problem.append((df.loc[(df['House'] == index) & (df['k6_overall'] >= 16), 'k6_overall'].count()).item())
+                result['k6_problem'] = {"year":house, "k6_problem":k6_problem}
             
             #### 2.2 Who are the 'problem' students?
-            k6_problem = df[['First-Name', 'Last-Name', 'CompleteYears', 'House', 'k6_overall']][(df['k6_overall'] >= 16)].sort_values(by='CompleteYears')
+            if(type == "y"):
+                k6_problem = df[['First-Name', 'Last-Name', 'CompleteYears', 'House', 'k6_overall']][(df['k6_overall'] >= 16)].sort_values(by='CompleteYears')
+            elif(type == "h"):
+                k6_problem = df[['First-Name', 'Last-Name', 'CompleteYears', 'House', 'k6_overall']][(df['k6_overall'] >= 16)].sort_values(by='House')
+                
             k6_problem_list = k6_problem.values.tolist()
             result['k6_problem_list'] = k6_problem_list
 
-            #### 2.3 Is language affecting K6?
-            year = []
-            for i in range (11):
-                year.append(i)
-                
+            #### 2.3 Is language affecting K6?                
             k6_english = []
             k6_nonenglish = []
-            for index in year:
-                k6_english.append(df.loc[(df['language'] == 0) & (df['CompleteYears'] == index), 'k6_overall'].mean())
-                k6_nonenglish.append(df.loc[(df['language'] == 1) & (df['CompleteYears'] == index), 'k6_overall'].mean())
-
-            result['k6_language'] = {"year":year, "k6_english":k6_english, "k6_nonenglish":k6_nonenglish}
+            
+            if(type == "y"):
+                for index in year:
+                    k6_english.append(df.loc[(df['language'] == 0) & (df['CompleteYears'] == index), 'k6_overall'].mean())
+                    k6_nonenglish.append(df.loc[(df['language'] == 1) & (df['CompleteYears'] == index), 'k6_overall'].mean())
+                result['k6_language'] = {"year":year, "k6_english":k6_english, "k6_nonenglish":k6_nonenglish}
+            elif(type == "h"):
+                for index in house:
+                    k6_english.append(df.loc[(df['language'] == 0) & (df['House'] == index), 'k6_overall'].mean())
+                    k6_nonenglish.append(df.loc[(df['language'] == 1) & (df['House'] == index), 'k6_overall'].mean())
+                result['k6_language'] = {"year":house, "k6_english":k6_english, "k6_nonenglish":k6_nonenglish}
             
             resultstring = json.dumps(result)
             if("NaN" in resultstring):
@@ -217,8 +229,8 @@ class y_k6(Resource):
             return "failed - "+str(ex)
 
 
-class y_manbox(Resource):
-    def post(self):
+class manbox(Resource):
+    def post(self, type):
         try:
             request_body = request.json
             survey = request_body["survey"]
@@ -227,28 +239,31 @@ class y_manbox(Resource):
             
             result = {}
             
-            year = []
-            for i in range (11):
-                year.append(i)
-
             manbox = []
-            for index in year:
-                manbox.append(df.loc[df['CompleteYears'] == index, 'Manbox5_overall'].mean())
             
-            result['manbox'] = {"year":year, "manbox":manbox}
+            if(type == "y"):
+                for index in year:
+                    manbox.append(df.loc[df['CompleteYears'] == index, 'Manbox5_overall'].mean())
+                result['manbox'] = {"year":year, "manbox":manbox}
+            elif(type == "h"):
+                for index in house:
+                    manbox.append(df.loc[df['House'] == index, 'Manbox5_overall'].mean())
+                result['manbox'] = {"year":house, "manbox":manbox}
             
             #### 3.1 Is language affecting Manbox?
-            year = []
-            for i in range (11):
-                year.append(i)
-
             english_manbox = []
             nonenglish_manbox = []
-            for index in year:
-                english_manbox.append(df.loc[(df['language'] == 0) & (df['CompleteYears'] == index), 'Manbox5_overall'].mean())
-                nonenglish_manbox.append(df.loc[(df['language'] == 1) & (df['CompleteYears'] == index), 'Manbox5_overall'].mean())
-                
-            result['language'] = {"year":year, "english":english_manbox, "nonenglish":nonenglish_manbox}
+            
+            if(type == "y"):
+                for index in year:
+                    english_manbox.append(df.loc[(df['language'] == 0) & (df['CompleteYears'] == index), 'Manbox5_overall'].mean())
+                    nonenglish_manbox.append(df.loc[(df['language'] == 1) & (df['CompleteYears'] == index), 'Manbox5_overall'].mean())
+                result['language'] = {"year":year, "english":english_manbox, "nonenglish":nonenglish_manbox}
+            elif(type == "h"):
+                for index in house:
+                    english_manbox.append(df.loc[(df['language'] == 0) & (df['House'] == index), 'Manbox5_overall'].mean())
+                    nonenglish_manbox.append(df.loc[(df['language'] == 1) & (df['House'] == index), 'Manbox5_overall'].mean())
+                result['language'] = {"year":house, "english":english_manbox, "nonenglish":nonenglish_manbox}
             
             resultstring = json.dumps(result)
             if("NaN" in resultstring):
@@ -260,8 +275,8 @@ class y_manbox(Resource):
             return "failed - "+str(ex)
 
 
-class y_masculinity(Resource):
-    def post(self):
+class masculinity(Resource):
+    def post(self, type):
         try:
             request_body = request.json
             survey = request_body["survey"]
@@ -270,28 +285,31 @@ class y_masculinity(Resource):
             
             result = {}
             
-            year = []
-            for i in range (11):
-                year.append(i)
-
             masculinity = []
-            for index in year:
-                masculinity.append(df.loc[df['CompleteYears'] == index, 'Masculinity_contrained'].mean())
             
-            result['masculinity'] = {"year":year, "masculinity":masculinity}
+            if(type == "y"):
+                for index in year:
+                    masculinity.append(df.loc[df['CompleteYears'] == index, 'Masculinity_contrained'].mean())
+                result['masculinity'] = {"year":year, "masculinity":masculinity}
+            elif(type == "h"):
+                for index in house:
+                    masculinity.append(df.loc[df['House'] == index, 'Masculinity_contrained'].mean())
+                result['masculinity'] = {"year":house, "masculinity":masculinity}
             
             #### 3.1 Is language affecting masculinity?
-            year = []
-            for i in range (11):
-                year.append(i)
-
             english = []
             nonenglish = []
-            for index in year:
-                english.append(df.loc[(df['language'] == 0) & (df['CompleteYears'] == index), 'Masculinity_contrained'].mean())
-                nonenglish.append(df.loc[(df['language'] == 1) & (df['CompleteYears'] == index), 'Masculinity_contrained'].mean())
-                
-            result['language'] = {"year":year, "english":english, "nonenglish":nonenglish}
+            
+            if(type == "y"):
+                for index in year:
+                    english.append(df.loc[(df['language'] == 0) & (df['CompleteYears'] == index), 'Masculinity_contrained'].mean())
+                    nonenglish.append(df.loc[(df['language'] == 1) & (df['CompleteYears'] == index), 'Masculinity_contrained'].mean())
+                result['language'] = {"year":year, "english":english, "nonenglish":nonenglish}
+            elif(type == "h"):
+                for index in house:
+                    english.append(df.loc[(df['language'] == 0) & (df['House'] == index), 'Masculinity_contrained'].mean())
+                    nonenglish.append(df.loc[(df['language'] == 1) & (df['House'] == index), 'Masculinity_contrained'].mean())
+                result['language'] = {"year":house, "english":english, "nonenglish":nonenglish}
             
             resultstring = json.dumps(result)
             if("NaN" in resultstring):
@@ -303,8 +321,8 @@ class y_masculinity(Resource):
             return "failed - "+str(ex)
 
 
-class y_engagement(Resource):
-    def post(self):
+class engagement(Resource):
+    def post(self, type):
         try:
             request_body = request.json
             survey = request_body["survey"]
@@ -313,28 +331,31 @@ class y_engagement(Resource):
             
             result = {}
             
-            year = []
-            for i in range (11):
-                year.append(i)
-
             engagement = []
-            for index in year:
-                engagement.append(df.loc[df['CompleteYears'] == index, 'School_support_engage6'].mean())
             
-            result['engagement'] = {"year":year, "engagement":engagement}
+            if(type == "y"):
+                for index in year:
+                    engagement.append(df.loc[df['CompleteYears'] == index, 'School_support_engage6'].mean())
+                result['engagement'] = {"year":year, "engagement":engagement}
+            elif(type == "h"):
+                for index in house:
+                    engagement.append(df.loc[df['House'] == index, 'School_support_engage6'].mean())
+                result['engagement'] = {"year":house, "engagement":engagement}
             
             #### 5.1 Is language affecting school engagement?
-            year = []
-            for i in range (11):
-                year.append(i)
-
             english = []
             nonenglish = []
-            for index in year:
-                english.append(df.loc[(df['language'] == 0) & (df['CompleteYears'] == index), 'School_support_engage6'].mean())
-                nonenglish.append(df.loc[(df['language'] == 1) & (df['CompleteYears'] == index), 'School_support_engage6'].mean())
-                
-            result['language'] = {"year":year, "english":english, "nonenglish":nonenglish}
+            
+            if(type == "y"):
+                for index in year:
+                    english.append(df.loc[(df['language'] == 0) & (df['CompleteYears'] == index), 'School_support_engage6'].mean())
+                    nonenglish.append(df.loc[(df['language'] == 1) & (df['CompleteYears'] == index), 'School_support_engage6'].mean())
+                result['language'] = {"year":year, "english":english, "nonenglish":nonenglish}
+            elif(type == "h"):
+                for index in house:
+                    english.append(df.loc[(df['language'] == 0) & (df['House'] == index), 'School_support_engage6'].mean())
+                    nonenglish.append(df.loc[(df['language'] == 1) & (df['House'] == index), 'School_support_engage6'].mean())
+                result['language'] = {"year":house, "english":english, "nonenglish":nonenglish}
             
             resultstring = json.dumps(result)
             if("NaN" in resultstring):
@@ -346,8 +367,8 @@ class y_engagement(Resource):
             return "failed - "+str(ex)
 
 
-class y_growthmindset(Resource):
-    def post(self):
+class growthmindset(Resource):
+    def post(self, type):
         try:
             request_body = request.json
             survey = request_body["survey"]
@@ -356,28 +377,31 @@ class y_growthmindset(Resource):
             
             result = {}
             
-            year = []
-            for i in range (11):
-                year.append(i)
-
             growthmindset = []
-            for index in year:
-                growthmindset.append(df.loc[df['CompleteYears'] == index, 'GrowthMindset'].mean())
             
-            result['y_growthmindset'] = {"year":year, "engagement":growthmindset}
+            if(type == "y"):
+                for index in year:
+                    growthmindset.append(df.loc[df['CompleteYears'] == index, 'GrowthMindset'].mean())
+                result['growthmindset'] = {"year":year, "growthmindset":growthmindset}
+            elif(type == "h"):
+                for index in house:
+                    growthmindset.append(df.loc[df['House'] == index, 'GrowthMindset'].mean())
+                result['growthmindset'] = {"year":house, "growthmindset":growthmindset}
             
             #### 5.1 Is language affecting GrowthMindset?
-            year = []
-            for i in range (11):
-                year.append(i)
-
             english = []
             nonenglish = []
-            for index in year:
-                english.append(df.loc[(df['language'] == 0) & (df['CompleteYears'] == index), 'GrowthMindset'].mean())
-                nonenglish.append(df.loc[(df['language'] == 1) & (df['CompleteYears'] == index), 'GrowthMindset'].mean())
-                
-            result['language'] = {"year":year, "english":english, "nonenglish":nonenglish}
+            
+            if(type == "y"):
+                for index in year:
+                    english.append(df.loc[(df['language'] == 0) & (df['CompleteYears'] == index), 'GrowthMindset'].mean())
+                    nonenglish.append(df.loc[(df['language'] == 1) & (df['CompleteYears'] == index), 'GrowthMindset'].mean())
+                result['language'] = {"year":year, "english":english, "nonenglish":nonenglish}
+            elif(type == "h"):
+                for index in house:
+                    english.append(df.loc[(df['language'] == 0) & (df['House'] == index), 'GrowthMindset'].mean())
+                    nonenglish.append(df.loc[(df['language'] == 1) & (df['House'] == index), 'GrowthMindset'].mean())
+                result['language'] = {"year":house, "english":english, "nonenglish":nonenglish}
             
             resultstring = json.dumps(result)
             if("NaN" in resultstring):

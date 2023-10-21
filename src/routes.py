@@ -1,11 +1,11 @@
-from .principle import dashboard, feedback, y_academic, y_k6, y_manbox, y_masculinity, y_engagement, y_growthmindset
+from .principle import dashboard, feedback, academic, k6, manbox, masculinity, engagement, growthmindset
 
 def initialize_routes(api):
     api.add_resource(dashboard, "/dashboard")
     api.add_resource(feedback, "/feedback")
-    api.add_resource(y_academic, "/y_academic")
-    api.add_resource(y_k6, "/y_k6")
-    api.add_resource(y_manbox, "/y_manbox")
-    api.add_resource(y_masculinity, "/y_masculinity")
-    api.add_resource(y_engagement, "/y_engagement")
-    api.add_resource(y_growthmindset, "/y_growthmindset")
+    api.add_resource(academic, "/academic/<type>")
+    api.add_resource(k6, "/k6/<type>")
+    api.add_resource(manbox, "/manbox/<type>")
+    api.add_resource(masculinity, "/masculinity/<type>")
+    api.add_resource(engagement, "/engagement/<type>")
+    api.add_resource(growthmindset, "/growthmindset/<type>")
