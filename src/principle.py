@@ -8,9 +8,10 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import ftplib
 import os
-from flask import send_file
 from dotenv import load_dotenv
 from datetime import datetime
+from loguru import logger
+from faker import Faker
 # ----------- Dashboard --------------------------------- 
 
 load_dotenv()
@@ -36,7 +37,7 @@ xlsxJuly = pd.ExcelFile('resources/datasets/Student Survey - July.xlsx')
 #            ftpSurvey = "s2/"
         
 
-class analysis(Resource):
+class generateImages(Resource):
     def post(self):
         
         request_body = request.json
@@ -775,21 +776,81 @@ class analysis(Resource):
 
 class dashboard(Resource):
     def post(self):
-        
         request_body = request.json
         survey = request_body["survey"]
         
+        df, xlsx = dataCleaning(survey)
+        
+        result = {}
+            
+        df1 = read_excel(xlsx, sheet_name='responses')
+        df2 = read_excel(xlsx, sheet_name='participants')
+        total = pd.merge(df1, df2, on=['Participant-ID'])
+        completed = total[total['Status'].isin(['completed'])]
+        in_progress = total[total['Status'].isin(['in progress'])]
+        invited = total[total['Status'].isin(['invited'])]
+        result['total'] = len(total)
+        result['completed'] = len(completed)
+        result['in_progress'] = len(in_progress)
+        result['invited'] = len(invited)
+        result['total'] = len(total)
+
+
+        year = []
+        for i in range (11):
+            year.append(i)
+            
+        #participation_by_year
+        count = []
+        for index in year:
+            count.append((df.loc[df['CompleteYears'] == index, 'CompleteYears'].count()).item())
+        result['participation_by_year'] = {'year':year, 'count':count}
+        
+        #participation_by_house
+        house = ['Vanguard', 'Griffin', 'Phoenix', 'Falcon', 'Redwood', 'Astral']
+        count = []
+        for index in house:
+            count.append((df.loc[df['House'] == index, 'House'].count()).item())
+        result['participation_by_house'] = {'house':house, 'count':count}
+        
+        return result
+
+
+class feedback(Resource):
+    def post(self):
+        request_body = request.json
+        survey = request_body["survey"]
+        start = request_body["start"]
+        
+        df, xlsx = dataCleaning(survey)
+        
+        result = {}
+        comments = df['YourComments']
+        fake = Faker()
+        for i in range(start, 10):
+            result[fake.name()] = str(list(comments)[i])
+        
+        return result
+        
+
+def dataCleaning(survey):      
         if(survey == "1"):
             xlsx = xlsxJan
-            ftpSurvey = "s1/"
         else:
             xlsx = xlsxJuly
-            ftpSurvey = "s2/"
             
-        df_principal = read_excel(xlsx, sheet_name='responses')
-        df2_principal = read_excel(xlsx, sheet_name='participants')
-        total = pd.merge(df_principal, df2_principal, on=['Participant-ID'])
-        completed = total[total['Status'].isin(['completed'])]
-        in_porgress = total[total['Status'].isin(['in progress'])]
-        invited = total[total['Status'].isin(['invited'])]
-        return {"total": len(total), "completed":len(completed), "in_progress":len(in_porgress), "invited":len(invited), "img_no_of_student_by_year":WEB_HOST+ftpSurvey+"img_no_of_student_by_year.png", "img_no_of_student_by_house":WEB_HOST+ftpSurvey+"img_no_of_student_by_house.png"}
+        # survey result  
+        df = read_excel(xlsx, sheet_name='responses')
+
+        # students attributes
+        df2 = read_excel(xlsx, sheet_name='participants')
+
+        # inner merge on participant ID
+        df3 = pd.merge(df, df2, on=['Participant-ID'])
+
+        # select only 'completed'
+        df3 = df3[df3['Status'].isin(['completed'])]
+        
+        return df3, xlsx
+
+
