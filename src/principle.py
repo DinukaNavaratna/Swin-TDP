@@ -12,6 +12,7 @@ from dotenv import load_dotenv
 from datetime import datetime
 from loguru import logger
 from faker import Faker
+import json
 # ----------- Dashboard --------------------------------- 
 
 load_dotenv()
@@ -860,7 +861,7 @@ class y_academic(Resource):
 
         yr = {}
         for index in year:
-            yr[index] = {'attendance': (df.loc[df['CompleteYears'] == index, 'Attendance'].mean()).item(), 'academic': (df.loc[df['CompleteYears'] == index, 'Perc_Academic'].mean()).item()}
+            yr[index] = {'attendance': (df.loc[df['CompleteYears'] == index, 'Attendance'].mean()).item(), 'results': (df.loc[df['CompleteYears'] == index, 'Perc_Academic'].mean()).item()}
         
         result['academic_attendance'] = yr
         
@@ -885,7 +886,71 @@ class y_academic(Resource):
             yr[index] = {'non_english': (df.loc[(df['language'] == 1) & (df['CompleteYears'] == index), 'Perc_Academic'].mean()), 'english': (df.loc[(df['language'] == 0) & (df['CompleteYears'] == index), 'Perc_Academic'].mean())}
 
         result['academic_language'] = yr
+        
+        resultstring = json.dumps(result)
+        if("NaN" in resultstring):
+            resultstring = resultstring.replace("NaN", "0")
+            result = json.loads(resultstring)
        
         return result
+
+
+class y_k6(Resource):
+    def post(self):
+        try:
+            request_body = request.json
+            survey = request_body["survey"]
+            
+            df, xlsx = dataCleaning(survey)
+            
+            result = {}
+            
+            year = []
+            for i in range (11):
+                year.append(i)
+
+            k6 = []
+            for index in year:
+                k6.append(df.loc[df['CompleteYears'] == index, 'k6_overall'].mean())
+            
+            result['k6'] = {"years":year, "k6":k6}
+            
+            #### 2.1 How many 'problem' students?
+            year = []
+            for i in range (11):
+                year.append(i)
+
+            k6_problem = []
+            for index in year:
+                k6_problem.append((df.loc[(df['CompleteYears'] == index) & (df['k6_overall'] >= 16), 'k6_overall'].count()).item())
+
+            result['k6_problem'] = {"years":year, "k6_problem":k6_problem}
+            
+            #### 2.2 Who are the 'problem' students?
+            k6_problem = df[['First-Name', 'Last-Name', 'CompleteYears', 'House', 'k6_overall']][(df['k6_overall'] >= 16)].sort_values(by='CompleteYears')
+            k6_problem_list = k6_problem.values.tolist()
+            result['k6_problem_list'] = k6_problem_list
+
+            #### 2.3 Is language affecting K6?
+            year = []
+            for i in range (11):
+                year.append(i)
+                
+            k6_english = []
+            k6_nonenglish = []
+            for index in year:
+                k6_english.append(df.loc[(df['language'] == 0) & (df['CompleteYears'] == index), 'k6_overall'].mean())
+                k6_nonenglish.append(df.loc[(df['language'] == 1) & (df['CompleteYears'] == index), 'k6_overall'].mean())
+
+            result['k6_language'] = {"years":year, "k6_english":k6_english, "k6_nonenglish":k6_nonenglish}
+            
+            resultstring = json.dumps(result)
+            if("NaN" in resultstring):
+                resultstring = resultstring.replace("NaN", "0")
+                result = json.loads(resultstring)
+        
+            return result
+        except Exception as ex:
+            return "failed - "+str(ex)
 
 
