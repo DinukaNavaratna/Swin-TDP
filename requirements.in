@@ -5,5 +5,11 @@ flask_jwt_extended
 mysql.connector
 flask-mysql
 flask_cors
-boto3
 python-dotenv
+numpy
+pandas
+networkx
+matplotlib
+seaborn
+openpyxl
+faker
