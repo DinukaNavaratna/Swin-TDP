@@ -1,27 +1,11 @@
 from flask_restful import Resource
 from flask import request
-import numpy as np
 import pandas as pd
 from pandas import read_excel
-import networkx as nx
-import matplotlib.pyplot as plt
-import seaborn as sns
-import ftplib
-import os
-from dotenv import load_dotenv
-from datetime import datetime
 from loguru import logger
 from faker import Faker
 import json
-# ----------- Dashboard --------------------------------- 
 
-load_dotenv()
-WEB_HOST = os.getenv("WEB_HOST")
-FTP_HOST = os.getenv("FTP_HOST")
-FTP_USER = os.getenv("FTP_USER")
-FTP_PASS = os.getenv("FTP_PASS")
-IMG_DIR = "files/img/"
-PHP_DIR = "files/php/"
 
 # data source
 xlsxJan = pd.ExcelFile('resources/datasets/Student Survey - Jan.xlsx')
@@ -96,15 +80,22 @@ class feedback(Resource):
     def post(self):
         request_body = request.json
         survey = request_body["survey"]
-        start = request_body["start"]
+        count = request_body["count"]
         
         df, xlsx = dataCleaning(survey)
         
         result = {}
         comments = df['YourComments']
+        result['count'] = len(comments)
+        comm = {}
         fake = Faker()
-        for i in range(start, 10):
-            result[fake.name()] = str(list(comments)[i])
+        start = (count*10)-10
+        end = start+10
+        if(end > len(comments)):
+            end = len(comments)
+        for i in range(start, end):
+            comm[fake.name()] = str(list(comments)[i])
+        result['comments'] = comm
         
         return result
 
