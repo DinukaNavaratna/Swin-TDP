@@ -303,3 +303,89 @@ class y_masculinity(Resource):
             return "failed - "+str(ex)
 
 
+class y_engagement(Resource):
+    def post(self):
+        try:
+            request_body = request.json
+            survey = request_body["survey"]
+            
+            df, xlsx = dataCleaning(survey)
+            
+            result = {}
+            
+            year = []
+            for i in range (11):
+                year.append(i)
+
+            engagement = []
+            for index in year:
+                engagement.append(df.loc[df['CompleteYears'] == index, 'School_support_engage6'].mean())
+            
+            result['engagement'] = {"year":year, "engagement":engagement}
+            
+            #### 5.1 Is language affecting school engagement?
+            year = []
+            for i in range (11):
+                year.append(i)
+
+            english = []
+            nonenglish = []
+            for index in year:
+                english.append(df.loc[(df['language'] == 0) & (df['CompleteYears'] == index), 'School_support_engage6'].mean())
+                nonenglish.append(df.loc[(df['language'] == 1) & (df['CompleteYears'] == index), 'School_support_engage6'].mean())
+                
+            result['language'] = {"year":year, "english":english, "nonenglish":nonenglish}
+            
+            resultstring = json.dumps(result)
+            if("NaN" in resultstring):
+                resultstring = resultstring.replace("NaN", "0")
+                result = json.loads(resultstring)
+        
+            return result
+        except Exception as ex:
+            return "failed - "+str(ex)
+
+
+class y_growthmindset(Resource):
+    def post(self):
+        try:
+            request_body = request.json
+            survey = request_body["survey"]
+            
+            df, xlsx = dataCleaning(survey)
+            
+            result = {}
+            
+            year = []
+            for i in range (11):
+                year.append(i)
+
+            growthmindset = []
+            for index in year:
+                growthmindset.append(df.loc[df['CompleteYears'] == index, 'GrowthMindset'].mean())
+            
+            result['y_growthmindset'] = {"year":year, "engagement":growthmindset}
+            
+            #### 5.1 Is language affecting GrowthMindset?
+            year = []
+            for i in range (11):
+                year.append(i)
+
+            english = []
+            nonenglish = []
+            for index in year:
+                english.append(df.loc[(df['language'] == 0) & (df['CompleteYears'] == index), 'GrowthMindset'].mean())
+                nonenglish.append(df.loc[(df['language'] == 1) & (df['CompleteYears'] == index), 'GrowthMindset'].mean())
+                
+            result['language'] = {"year":year, "english":english, "nonenglish":nonenglish}
+            
+            resultstring = json.dumps(result)
+            if("NaN" in resultstring):
+                resultstring = resultstring.replace("NaN", "0")
+                result = json.loads(resultstring)
+        
+            return result
+        except Exception as ex:
+            return "failed - "+str(ex)
+
+
