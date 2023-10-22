@@ -16,6 +16,8 @@ house = ['Vanguard', 'Griffin', 'Phoenix', 'Falcon', 'Redwood', 'Astral']
 year = []
 for i in range (11):
     year.append(i)
+fake = Faker()
+fake_houses = ['Shrek', 'Scooby', 'Micky', 'Odi', 'Scrappy', 'Garfield']
 
 
 def dataCleaning(survey):
@@ -68,11 +70,10 @@ class Odashboard(Resource):
         result['participation_by_year'] = {'year':year, 'count':count}
         
         #participation_by_house
-        house = ['Vanguard', 'Griffin', 'Phoenix', 'Falcon', 'Redwood', 'Astral']
         count = []
         for index in house:
             count.append((df.loc[df['House'] == index, 'House'].count()).item())
-        result['participation_by_house'] = {'house':house, 'count':count}
+        result['participation_by_house'] = {'house':fake_houses, 'count':count}
         
         return result
 
@@ -89,7 +90,6 @@ class Ofeedback(Resource):
         comments = df['YourComments']
         result['count'] = len(comments)
         comm = {}
-        fake = Faker()
         start = (count*10)-10
         end = start+10
         if(end > len(comments)):
@@ -117,8 +117,10 @@ class Oacademic(Resource):
             for index in year:
                 yr[index] = {'attendance': (df.loc[df['CompleteYears'] == index, 'Attendance'].mean()).item(), 'results': (df.loc[df['CompleteYears'] == index, 'Perc_Academic'].mean()).item()}
         elif(type == "h"):
+            c = 0
             for index in house:
-                yr[index] = {'attendance': (df.loc[df['House'] == index, 'Attendance'].mean()).item(), 'results': (df.loc[df['House'] == index, 'Perc_Academic'].mean()).item()}
+                yr[fake_houses[c]] = {'attendance': (df.loc[df['House'] == index, 'Attendance'].mean()).item(), 'results': (df.loc[df['House'] == index, 'Perc_Academic'].mean()).item()}
+                c += 1
             
         result['academic_attendance'] = yr
         
@@ -129,8 +131,10 @@ class Oacademic(Resource):
             for index in year:
                 yr[index] = {'non_english': (len(df.loc[(df['language'] == 1) & (df['CompleteYears'] == index)]) / len(df[df['CompleteYears'] == index])), 'english': (len(df.loc[(df['language'] == 0) & (df['CompleteYears'] == index)]) / len(df[df['CompleteYears'] == index]))}
         elif(type == "h"):
+            c = 0
             for index in house:
-                yr[index] = {'non_english': (len(df.loc[(df['language'] == 1) & (df['House'] == index)]) / len(df[df['House'] == index])), 'english': (len(df.loc[(df['language'] == 0) & (df['House'] == index)]) / len(df[df['House'] == index]))}
+                yr[fake_houses[c]] = {'non_english': (len(df.loc[(df['language'] == 1) & (df['House'] == index)]) / len(df[df['House'] == index])), 'english': (len(df.loc[(df['language'] == 0) & (df['House'] == index)]) / len(df[df['House'] == index]))}
+                c += 1
             
         result['language'] = yr
 
@@ -141,8 +145,10 @@ class Oacademic(Resource):
             for index in year:
                 yr[index] = {'non_english': (df.loc[(df['language'] == 1) & (df['CompleteYears'] == index), 'Perc_Academic'].mean()), 'english': (df.loc[(df['language'] == 0) & (df['CompleteYears'] == index), 'Perc_Academic'].mean())}
         elif(type == "h"):
+            c = 0
             for index in house:
-                yr[index] = {'non_english': (df.loc[(df['language'] == 1) & (df['House'] == index), 'Perc_Academic'].mean()), 'english': (df.loc[(df['language'] == 0) & (df['House'] == index), 'Perc_Academic'].mean())}
+                yr[fake_houses[c]] = {'non_english': (df.loc[(df['language'] == 1) & (df['House'] == index), 'Perc_Academic'].mean()), 'english': (df.loc[(df['language'] == 0) & (df['House'] == index), 'Perc_Academic'].mean())}
+                c += 1
             
         result['academic_language'] = yr
         
@@ -173,7 +179,7 @@ class Ok6(Resource):
             elif(type == "h"):
                 for index in house:
                     k6.append(df.loc[df['House'] == index, 'k6_overall'].mean())
-                result['k6'] = {"year":house, "k6":k6}                
+                result['k6'] = {"year":fake_houses, "k6":k6}                
             
             #### 2.1 How many 'problem' students?
             k6_problem = []
@@ -185,7 +191,7 @@ class Ok6(Resource):
             elif(type == "h"):
                 for index in house:
                     k6_problem.append((df.loc[(df['House'] == index) & (df['k6_overall'] >= 16), 'k6_overall'].count()).item())
-                result['k6_problem'] = {"year":house, "k6_problem":k6_problem}
+                result['k6_problem'] = {"year":fake_houses, "k6_problem":k6_problem}
             
             #### 2.2 Who are the 'problem' students?
             if(type == "y"):
@@ -194,6 +200,9 @@ class Ok6(Resource):
                 k6_problem = df[['First-Name', 'Last-Name', 'CompleteYears', 'House', 'k6_overall']][(df['k6_overall'] >= 16)].sort_values(by='House')
                 
             k6_problem_list = k6_problem.values.tolist()
+            for i in range(len(k6_problem_list)):
+                k6_problem_list[i][3] = fake_houses[house.index(k6_problem_list[i][3])]
+                
             result['k6_problem_list'] = k6_problem_list
 
             #### 2.3 Is language affecting K6?                
@@ -209,7 +218,7 @@ class Ok6(Resource):
                 for index in house:
                     k6_english.append(df.loc[(df['language'] == 0) & (df['House'] == index), 'k6_overall'].mean())
                     k6_nonenglish.append(df.loc[(df['language'] == 1) & (df['House'] == index), 'k6_overall'].mean())
-                result['k6_language'] = {"year":house, "k6_english":k6_english, "k6_nonenglish":k6_nonenglish}
+                result['k6_language'] = {"year":fake_houses, "k6_english":k6_english, "k6_nonenglish":k6_nonenglish}
             
             resultstring = json.dumps(result)
             if("NaN" in resultstring):
@@ -240,7 +249,7 @@ class Omanbox(Resource):
             elif(type == "h"):
                 for index in house:
                     manbox.append(df.loc[df['House'] == index, 'Manbox5_overall'].mean())
-                result['manbox'] = {"year":house, "manbox":manbox}
+                result['manbox'] = {"year":fake_houses, "manbox":manbox}
             
             #### 3.1 Is language affecting Manbox?
             english_manbox = []
@@ -255,7 +264,7 @@ class Omanbox(Resource):
                 for index in house:
                     english_manbox.append(df.loc[(df['language'] == 0) & (df['House'] == index), 'Manbox5_overall'].mean())
                     nonenglish_manbox.append(df.loc[(df['language'] == 1) & (df['House'] == index), 'Manbox5_overall'].mean())
-                result['language'] = {"year":house, "english":english_manbox, "nonenglish":nonenglish_manbox}
+                result['language'] = {"year":fake_houses, "english":english_manbox, "nonenglish":nonenglish_manbox}
             
             resultstring = json.dumps(result)
             if("NaN" in resultstring):
@@ -286,7 +295,7 @@ class Omasculinity(Resource):
             elif(type == "h"):
                 for index in house:
                     masculinity.append(df.loc[df['House'] == index, 'Masculinity_contrained'].mean())
-                result['masculinity'] = {"year":house, "masculinity":masculinity}
+                result['masculinity'] = {"year":fake_houses, "masculinity":masculinity}
             
             #### 3.1 Is language affecting masculinity?
             english = []
@@ -301,7 +310,7 @@ class Omasculinity(Resource):
                 for index in house:
                     english.append(df.loc[(df['language'] == 0) & (df['House'] == index), 'Masculinity_contrained'].mean())
                     nonenglish.append(df.loc[(df['language'] == 1) & (df['House'] == index), 'Masculinity_contrained'].mean())
-                result['language'] = {"year":house, "english":english, "nonenglish":nonenglish}
+                result['language'] = {"year":fake_houses, "english":english, "nonenglish":nonenglish}
             
             resultstring = json.dumps(result)
             if("NaN" in resultstring):
@@ -332,7 +341,7 @@ class Oengagement(Resource):
             elif(type == "h"):
                 for index in house:
                     engagement.append(df.loc[df['House'] == index, 'School_support_engage6'].mean())
-                result['engagement'] = {"year":house, "engagement":engagement}
+                result['engagement'] = {"year":fake_houses, "engagement":engagement}
             
             #### 5.1 Is language affecting school engagement?
             english = []
@@ -347,7 +356,7 @@ class Oengagement(Resource):
                 for index in house:
                     english.append(df.loc[(df['language'] == 0) & (df['House'] == index), 'School_support_engage6'].mean())
                     nonenglish.append(df.loc[(df['language'] == 1) & (df['House'] == index), 'School_support_engage6'].mean())
-                result['language'] = {"year":house, "english":english, "nonenglish":nonenglish}
+                result['language'] = {"year":fake_houses, "english":english, "nonenglish":nonenglish}
             
             resultstring = json.dumps(result)
             if("NaN" in resultstring):
@@ -378,7 +387,7 @@ class Ogrowthmindset(Resource):
             elif(type == "h"):
                 for index in house:
                     growthmindset.append(df.loc[df['House'] == index, 'GrowthMindset'].mean())
-                result['growthmindset'] = {"year":house, "growthmindset":growthmindset}
+                result['growthmindset'] = {"year":fake_houses, "growthmindset":growthmindset}
             
             #### 5.1 Is language affecting GrowthMindset?
             english = []
@@ -393,7 +402,7 @@ class Ogrowthmindset(Resource):
                 for index in house:
                     english.append(df.loc[(df['language'] == 0) & (df['House'] == index), 'GrowthMindset'].mean())
                     nonenglish.append(df.loc[(df['language'] == 1) & (df['House'] == index), 'GrowthMindset'].mean())
-                result['language'] = {"year":house, "english":english, "nonenglish":nonenglish}
+                result['language'] = {"year":fake_houses, "english":english, "nonenglish":nonenglish}
             
             resultstring = json.dumps(result)
             if("NaN" in resultstring):
@@ -444,14 +453,33 @@ class Oclubs(Resource):
             principal_sna_club_plot = student_club.merge(principal_sna_club_plot, on='Participant-ID', how='outer')
             principal_sna_club_plot = (principal_sna_club_plot[['Participant-ID', 'Target', 'Club']]).dropna()
             
+            src = principal_sna_club_plot['Participant-ID'].tolist()
+            trg = principal_sna_club_plot['Target'].tolist()
+            clb = principal_sna_club_plot['Club'].tolist()
+            src = list(map(str, src))
+            trg = list(map(str, trg))
             
-            result['source'] = (principal_sna_club_plot['Participant-ID'].tolist())
-            result['target'] = (principal_sna_club_plot['Target'].tolist())
-            result['club'] = (principal_sna_club_plot['Club'].tolist())
+            for i in range(len(src)):
+                src[i] = maskID(src[i])
+            for i in range(len(trg)):
+                trg[i] = maskID(trg[i])
+                
+            result['source'] = src
+            result['target'] = trg
+            result['club'] = clb
+            
             
             return result
         except Exception as ex:
             return "failed - "+str(ex)
 
+
+def maskID(id):
+    alp = ["A", "C", "G", "E", "W", "H", "L", "P", "M", "S"]
+    id = str(id).split(".")[0]
+    id = [int(x) for x in str(id)]
+    for i in range(len(id)):
+        id[i] = alp[id[i]]
+    return ''.join(id)
 
     

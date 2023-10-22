@@ -135,8 +135,12 @@ class Scolleague(Resource):
         
         student_sna_plot['Participant-ID'] = np.int64(student_sna_plot['Participant-ID'] / 2 * 3 + 5)
         student_sna_plot['Target'] = np.int64(student_sna_plot['Target'] / 2 * 3 + 5)
-
-        result['net_0_Friends'] = ((student_sna_plot.values).tolist())
+        
+        lis = (student_sna_plot.values).tolist()
+        for i in range(len(lis)):
+            lis[i][0] = maskID(lis[i][0])
+            lis[i][1] = maskID(lis[i][1])
+        result['net_0_Friends'] = lis
         
 
         student_sna = read_excel(xlsx, sheet_name='net_1_Influential')
@@ -150,7 +154,11 @@ class Scolleague(Resource):
         student_sna_plot['Participant-ID'] = np.int64(student_sna_plot['Participant-ID'] / 2 * 3 + 5)
         student_sna_plot['Target'] = np.int64(student_sna_plot['Target'] / 2 * 3 + 5)
 
-        result['net_1_Influential'] = ((student_sna_plot.values).tolist())
+        lis = (student_sna_plot.values).tolist()
+        for i in range(len(lis)):
+            lis[i][0] = maskID(lis[i][0])
+            lis[i][1] = maskID(lis[i][1])
+        result['net_1_Influential'] = lis
         
 
         student_sna = read_excel(xlsx, sheet_name='net_2_Feedback')
@@ -164,7 +172,11 @@ class Scolleague(Resource):
         student_sna_plot['Participant-ID'] = np.int64(student_sna_plot['Participant-ID'] / 2 * 3 + 5)
         student_sna_plot['Target'] = np.int64(student_sna_plot['Target'] / 2 * 3 + 5)
 
-        result['net_2_Feedback'] = ((student_sna_plot.values).tolist())
+        lis = (student_sna_plot.values).tolist()
+        for i in range(len(lis)):
+            lis[i][0] = maskID(lis[i][0])
+            lis[i][1] = maskID(lis[i][1])
+        result['net_2_Feedback'] = lis
         
 
         student_sna = read_excel(xlsx, sheet_name='net_3_MoreTime')
@@ -178,7 +190,11 @@ class Scolleague(Resource):
         student_sna_plot['Participant-ID'] = np.int64(student_sna_plot['Participant-ID'] / 2 * 3 + 5)
         student_sna_plot['Target'] = np.int64(student_sna_plot['Target'] / 2 * 3 + 5)
 
-        result['net_3_MoreTime'] = ((student_sna_plot.values).tolist())
+        lis = (student_sna_plot.values).tolist()
+        for i in range(len(lis)):
+            lis[i][0] = maskID(lis[i][0])
+            lis[i][1] = maskID(lis[i][1])
+        result['net_3_MoreTime'] = lis
         
 
         student_sna = read_excel(xlsx, sheet_name='net_4_Advice')
@@ -192,7 +208,18 @@ class Scolleague(Resource):
         student_sna_plot['Participant-ID'] = np.int64(student_sna_plot['Participant-ID'] / 2 * 3 + 5)
         student_sna_plot['Target'] = np.int64(student_sna_plot['Target'] / 2 * 3 + 5)
 
-        result['net_4_Advice'] = ((student_sna_plot.values).tolist())
+        lis = (student_sna_plot.values).tolist()
+        for i in range(len(lis)):
+            lis[i][0] = maskID(lis[i][0])
+            lis[i][1] = maskID(lis[i][1])
+        result['net_4_Advice'] = lis
         
         return result
-        
+
+
+def maskID(id):
+    alp = ["A", "C", "G", "E", "W", "H", "L", "P", "M", "S"]
+    id = [int(x) for x in str(id)]
+    for i in range(len(id)):
+        id[i] = alp[id[i]]
+    return ''.join(id)
