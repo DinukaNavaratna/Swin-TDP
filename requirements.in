@@ -1,0 +1,15 @@
+flask
+flask_restful
+loguru
+flask_jwt_extended
+mysql.connector
+flask-mysql
+flask_cors
+python-dotenv
+numpy
+pandas
+networkx
+matplotlib
+seaborn
+openpyxl
+faker
