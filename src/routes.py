@@ -1,5 +1,6 @@
 from .principle import dashboard, feedback, academic, k6, manbox, masculinity, engagement, growthmindset
 from .teacher import Tdashboard, Tfeedback, Tk6, Tdisrespect, Tmanbox, Tmasculinity, Tengagement, Tgrowthmindset, Tstudent
+from .student import Sdashboard, Snominations, Scolleague
 
 def initialize_routes(api):
     api.add_resource(dashboard, "/dashboard")
@@ -19,3 +20,6 @@ def initialize_routes(api):
     api.add_resource(Tengagement, "/Tengagement")
     api.add_resource(Tgrowthmindset, "/Tgrowthmindset")
     api.add_resource(Tstudent, "/Tstudent")
+    api.add_resource(Sdashboard, "/Sdashboard")
+    api.add_resource(Snominations, "/Snominations")
+    api.add_resource(Scolleague, "/Scolleague")
