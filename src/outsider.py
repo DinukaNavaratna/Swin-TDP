@@ -17,7 +17,6 @@ year = []
 for i in range (11):
     year.append(i)
 
-        
 
 def dataCleaning(survey):
         if(survey == "1"):
@@ -40,7 +39,7 @@ def dataCleaning(survey):
         return df3, xlsx
 
 
-class dashboard(Resource):
+class Odashboard(Resource):
     def post(self):
         request_body = request.json
         survey = request_body["survey"]
@@ -78,7 +77,7 @@ class dashboard(Resource):
         return result
 
 
-class feedback(Resource):
+class Ofeedback(Resource):
     def post(self):
         request_body = request.json
         survey = request_body["survey"]
@@ -102,7 +101,7 @@ class feedback(Resource):
         return result
 
 
-class academic(Resource):
+class Oacademic(Resource):
     def post(self, type):
         request_body = request.json
         survey = request_body["survey"]
@@ -155,7 +154,7 @@ class academic(Resource):
         return result
 
 
-class k6(Resource):
+class Ok6(Resource):
     def post(self, type):
         try:
             request_body = request.json
@@ -222,7 +221,7 @@ class k6(Resource):
             return "failed - "+str(ex)
 
 
-class manbox(Resource):
+class Omanbox(Resource):
     def post(self, type):
         try:
             request_body = request.json
@@ -268,7 +267,7 @@ class manbox(Resource):
             return "failed - "+str(ex)
 
 
-class masculinity(Resource):
+class Omasculinity(Resource):
     def post(self, type):
         try:
             request_body = request.json
@@ -314,7 +313,7 @@ class masculinity(Resource):
             return "failed - "+str(ex)
 
 
-class engagement(Resource):
+class Oengagement(Resource):
     def post(self, type):
         try:
             request_body = request.json
@@ -360,7 +359,7 @@ class engagement(Resource):
             return "failed - "+str(ex)
 
 
-class growthmindset(Resource):
+class Ogrowthmindset(Resource):
     def post(self, type):
         try:
             request_body = request.json
@@ -406,7 +405,7 @@ class growthmindset(Resource):
             return "failed - "+str(ex)
 
 
-class clubs(Resource):
+class Oclubs(Resource):
     def post(self):
         try:
             request_body = request.json

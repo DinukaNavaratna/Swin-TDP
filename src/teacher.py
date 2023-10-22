@@ -77,7 +77,7 @@ class Tdashboard(Resource):
         count = []
         for index in houses:
             count.append((completed.loc[completed['House'] == index, 'House'].count()).item())
-        result['participation_by_house'] = {'house':house, 'count':count}
+        result['participation_by_house'] = {'house':houses, 'count':count}
         
         return result
 
