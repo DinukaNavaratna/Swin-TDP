@@ -10,6 +10,8 @@ import json
 # data source
 xlsxJan = pd.ExcelFile('resources/datasets/Student Survey - Jan.xlsx')
 xlsxJuly = pd.ExcelFile('resources/datasets/Student Survey - July.xlsx')
+xlsxJan1 = pd.ExcelFile('resources/datasets/Student Survey - Jan1.xlsx')
+xlsxJuly1 = pd.ExcelFile('resources/datasets/Student Survey - July1.xlsx')
 house = ['Vanguard', 'Griffin', 'Phoenix', 'Falcon', 'Redwood', 'Astral']
 year = []
 for i in range (11):
@@ -404,3 +406,53 @@ class growthmindset(Resource):
             return "failed - "+str(ex)
 
 
+class clubs(Resource):
+    def post(self):
+        try:
+            request_body = request.json
+            club = request_body["club"]
+            cat = request_body["cat"]
+            
+            result = {}
+            
+            # Get the clubs
+            df_principal_club = read_excel(xlsxJuly1, sheet_name='responses')
+            df2_principal_club = read_excel(xlsxJuly1, sheet_name='participantsNov')
+            
+            club_jul = read_excel(xlsxJuly1, sheet_name='net_affiliation_0_SchoolActivit')
+            club_jan = read_excel(xlsxJan1, sheet_name='net_affiliation_0_SchoolActivit')
+            student_club = club_jan.merge(club_jul, on='ID merge', how='outer')
+            student_club = student_club.drop_duplicates(subset=['Club', 'ID merge'], keep='first')
+            student_club = student_club.drop(['Source_x', 'Target_x', 'ID merge', 'Target_y'], axis=1)
+            student_club = student_club.rename(columns={'Source_y': 'Participant-ID'})
+            
+            df3_principal_club = pd.merge(df_principal_club, df2_principal_club, on=['Participant-ID'])
+            df4_principal_club = student_club.merge(df3_principal_club, on='Participant-ID', how='outer')
+            df4_principal_club = df4_principal_club[df4_principal_club['Status'].isin(['completed'])]
+            
+            club_list = student_club['Club'].unique().tolist()
+            logger.info(club_list)
+            # //Get the clubs
+            
+            club_html = club # user select a house
+            sna_cat_html = cat # user select a score to view
+            
+            principal_sna_club_cat = read_excel(xlsxJuly1, sheet_name=sna_cat_html)
+            principal_sna_club_cat = principal_sna_club_cat.rename(columns={'Source': 'Participant-ID', 'Target': 'Target'})
+            principal_sna_club_participant = read_excel(xlsxJuly1, sheet_name='participantsNov')
+            
+            principal_sna_club_plot = pd.merge(principal_sna_club_cat, principal_sna_club_participant, on=['Participant-ID'])
+            principal_sna_club_plot = student_club.merge(principal_sna_club_plot, on='Participant-ID', how='outer')
+            principal_sna_club_plot = principal_sna_club_plot[['Participant-ID', 'Target', 'Club']]
+            
+            
+            result['source'] = (principal_sna_club_plot['Participant-ID'].tolist())
+            result['target'] = (principal_sna_club_plot['Target'].tolist())
+            result['club'] = (principal_sna_club_plot['Club'].tolist())
+            
+            return result
+        except Exception as ex:
+            return "failed - "+str(ex)
+
+
+    
