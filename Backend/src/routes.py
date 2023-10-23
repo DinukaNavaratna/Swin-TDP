@@ -1,6 +1,6 @@
 from .principle import dashboard, feedback, academic, k6, manbox, masculinity, engagement, growthmindset, clubs
 from .outsider import Odashboard, Ofeedback, Oacademic, Ok6, Omanbox, Omasculinity, Oengagement, Ogrowthmindset, Oclubs
-from .teacher import Tdashboard, Tfeedback, Tk6, Tdisrespect, Tmanbox, Tmasculinity, Tengagement, Tgrowthmindset, Tstudent
+from .teacher import Tdashboard, Tfeedback, Tk6, Tdisrespect, Tmanbox, Tmasculinity, Tengagement, Tgrowthmindset, Tstudent, Tdata
 from .student import Sdashboard, Snominations, Scolleague
 
 def initialize_routes(api):
@@ -23,6 +23,7 @@ def initialize_routes(api):
     api.add_resource(Tengagement, "/Tengagement")
     api.add_resource(Tgrowthmindset, "/Tgrowthmindset")
     api.add_resource(Tstudent, "/Tstudent")
+    api.add_resource(Tdata, "/Tdata")
     
     api.add_resource(Sdashboard, "/Sdashboard")
     api.add_resource(Snominations, "/Snominations")
