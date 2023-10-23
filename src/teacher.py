@@ -358,5 +358,30 @@ class Tdata(Resource):
             return "failed (" + str(exc_tb.tb_lineno) + ") - "+str(ex)
 
 
+class Tadjanency(Resource):
+    def post(self):
+        try:
+            request_body = request.json
+            cat = request_body["cat"]
+            house = request_body["house"]
+            
+            result = {}
+            
+            teacher_sna_cat = read_excel(xlsxJuly, sheet_name=cat)
+            teacher_sna_cat = teacher_sna_cat.rename(columns={'Source': 'Participant-ID', 'Target': 'Target'})
+            teacher_sna_participant = read_excel(xlsxJuly, sheet_name='participants')
+            teacher_sna_plot = pd.merge(teacher_sna_cat, teacher_sna_participant, on=['Participant-ID'])
+            teacher_sna_plot = teacher_sna_plot[['Participant-ID', 'Target', 'CompleteYears']][teacher_sna_plot['House'] == house]          
+            
+            result['source'] = (teacher_sna_plot['Participant-ID'].tolist())
+            result['target'] = (teacher_sna_plot['Target'].tolist())
+            result['club'] = (teacher_sna_plot['CompleteYears'].tolist())
+            
+            return result
+        except Exception as ex:
+            return "failed - "+str(ex)
+
+
+
 
 
