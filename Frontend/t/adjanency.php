@@ -49,47 +49,14 @@
         <li class="nav-item dropdown pe-3">
 
           <a class="nav-link nav-profile d-flex align-items-center pe-0" href="#" data-bs-toggle="dropdown">
-          <img src="../assets/img/teacher.jpg" alt="Profile" class="rounded-circle">
-            <span class="d-none d-md-block dropdown-toggle ps-2">M. Blonde</span>
+          <img src="../assets/img/profile-img.jpg" alt="Profile" class="rounded-circle">
+            <span class="d-none d-md-block dropdown-toggle ps-2">K. Anderson</span>
           </a><!-- End Profile Iamge Icon -->
 
           <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
             <li class="dropdown-header">
-              <h6>Miss Blonde</h6>
-              <span>Teacher</span>
-            </li>
-            <li>
-              <hr class="dropdown-divider">
-            </li>
-
-            <li onclick="getdata('1');">
-              <a class="dropdown-item d-flex align-items-center" href="#">
-                <i class="bi bi-person"></i>
-                <span>Survey 01</span>
-              </a>
-            </li>
-            <li>
-              <hr class="dropdown-divider">
-            </li>
-
-            <li onclick="getdata('2');">
-              <a class="dropdown-item d-flex align-items-center" href="#">
-                <i class="bi bi-person"></i>
-                <span>Survey 02</span>
-              </a>
-            </li>
-            <li>
-              <hr class="dropdown-divider">
-            </li>
-
-            <li>
-              <a class="dropdown-item d-flex align-items-center" href="users-profile.html">
-                <i class="bi bi-person"></i>
-                <span>Upload XLSX</span>
-              </a>
-            </li>
-            <li>
-              <hr class="dropdown-divider">
+              <h6>Kevin Anderson</h6>
+              <span>Principle</span>
             </li>
 
             <li>
@@ -124,8 +91,8 @@
           <span>K6 Analysis</span>
         </a>
       </li>
-      <li class="nav-item">
-        <a class="nav-link collapsed" href="disrespect.php">
+      <li class="nav-item collapsed">
+        <a class="nav-link" href="disrespect.php">
           <i class="bi bi-grid"></i>
           <span>Disrespect</span>
         </a>
@@ -149,7 +116,7 @@
         </a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="growthmindset.php">
+        <a class="nav-link collapsed" href="growthmindset.php">
           <i class="bi bi-grid"></i>
           <span>Growth Mindset</span>
         </a>
@@ -161,7 +128,7 @@
         </a>
       </li>
       <li class="nav-item">
-        <a class="nav-link collapsed" href="adjanency.php">
+        <a class="nav-link" href="adjanency.php">
           <i class="bi bi-grid"></i>
           <span>Adjanency Matrix</span>
         </a>
@@ -174,11 +141,8 @@
   <main id="main" class="main">
 
     <div class="pagetitle">
-      <h1>Growth Mindset Analysis</h1>
+      <h1></h1>
       <nav>
-        <ol class="breadcrumb">
-          <li class="breadcrumb-item" id="survey_num">Survey 01 Analysis</li>
-        </ol>
       </nav>
     </div><!-- End Page Title -->
     <br>
@@ -186,28 +150,42 @@
     <section class="section">
       <div class="row">
         <div class="col-lg-12">
-
           <div class="card">
             <div class="card-body">
-              <h5 class="card-title">Students with the lowest Growth Mindset (5%)</h5>
-              <!-- Table with hoverable rows -->
-              <table class="table table-hover">
-                <thead>
-                  <tr>
-                    <th scope="col">Participant ID</th>
-                    <th scope="col">First Name</th>
-                    <th scope="col">Last Name</th>
-                    <th scope="col">Years Completed</th>
-                    <th scope="col">Score</th>
-                  </tr>
-                </thead>
-                <tbody id="growthmindset_tbl">
-                </tbody>
-              </table>
-              <!-- End Table with hoverable rows -->
+              <div class="row">
+                <div class="col-lg-3">
+                  <h5 class="card-title">Select the Category</h5>
+                  <select class="form-select" aria-label="Select a category" id="cat">
+                    <option selected disabled>Select a category</option>
+                    <option value="net_0_Friends">net_0_Friends</option>
+                    <option value="net_1_Influential">net_1_Influential</option>
+                    <option value="net_2_Feedback">net_2_Feedback</option>
+                    <option value="net_3_MoreTime">net_3_MoreTime</option>
+                    <option value="net_4_Advice">net_4_Advice</option>
+                    <option value="net_5_Disrespect">net_5_Disrespect</option>
+                  </select>
+                </div>
+
+                <div class="col-lg-3">
+                  <h5 class="card-title">&nbsp;</h5>
+                  <button type="button" class="btn btn-outline-primary" onclick="search();">Submit</button>
+                </div>
+              </div>
             </div>
           </div>
+        </div>
+      </div>
+    </section>
 
+    <section class="section">
+      <div class="row">
+        <div class="col-lg-12">
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title"></h5>
+              <div id="adj_sna" style="min-height: 100vh;" class="echart"></div>
+            </div>
+          </div>
         </div>
       </div>
     </section>
@@ -243,10 +221,7 @@
   <!-- Template Main JS File -->
   <script src="../assets/js/main.js"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-  <script src="growthmindset.js"></script>
-  <script>
-    getdata("1");
-  </script>
+  <script src="adjanency.js"></script>
 
 </body>
 

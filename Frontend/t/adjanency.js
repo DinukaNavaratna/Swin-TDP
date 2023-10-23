@@ -1,4 +1,4 @@
-var chartDom = document.getElementById('clubs_sna');
+var chartDom = document.getElementById('adj_sna');
 var myChart = echarts.init(chartDom);
 
 function search() {
@@ -11,15 +11,15 @@ function search() {
     myChart.showLoading();
 
     var settings = {
-        "url": backendURL+"/Oclubs",
+        "url": backendURL + "/Tadjanency",
         "method": "POST",
         "timeout": 0,
         "headers": {
             "Content-Type": "application/json"
         },
         "data": JSON.stringify({
-            "cat": cat,
-            "club": "Photography Club"
+            "cat": "net_0_Friends",
+            "house": "Vanguard"
         }),
     };
 
@@ -46,12 +46,12 @@ function tojson(source, target, club) {
             json.nodes.push({
                 "id": source[c].toString(),
                 "name": source[c].toString(),
-                "category": club[c].toString()
+                "category": club[c].toString() + " years"
             });
             json.nodes.push({
                 "id": target[c].toString(),
                 "name": target[c].toString(),
-                "category": club[c].toString()
+                "category": club[c].toString() + " years"
             });
         } else {
             var new1 = true;
@@ -71,14 +71,14 @@ function tojson(source, target, club) {
                 json.nodes.push({
                     "id": source[c].toString(),
                     "name": source[c].toString(),
-                    "category": club[c].toString()
+                    "category": club[c].toString() + " years"
                 });
             }
             if (new2) {
                 json.nodes.push({
                     "id": target[c].toString(),
                     "name": target[c].toString(),
-                    "category": club[c].toString()
+                    "category": club[c].toString() + " years"
                 });
             }
         }
@@ -90,7 +90,7 @@ function tojson(source, target, club) {
 
         if (json.categories.length == 0) {
             json.categories.push({
-                "name": club[c].toString()
+                "name": club[c].toString() + " years"
             });
         } else {
             var newclub = true;
@@ -102,7 +102,7 @@ function tojson(source, target, club) {
             }
             if (newclub) {
                 json.categories.push({
-                    "name": club[c].toString()
+                    "name": club[c].toString() + " years"
                 });
             }
         }
