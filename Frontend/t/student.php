@@ -49,7 +49,7 @@
         <li class="nav-item dropdown pe-3">
 
           <a class="nav-link nav-profile d-flex align-items-center pe-0" href="#" data-bs-toggle="dropdown">
-          <img src="../assets/img/teacher.jpg" alt="Profile" class="rounded-circle">
+            <img src="../assets/img/teacher.jpg" alt="Profile" class="rounded-circle">
             <span class="d-none d-md-block dropdown-toggle ps-2">M. Blonde</span>
           </a><!-- End Profile Iamge Icon -->
 
@@ -159,6 +159,19 @@
     </div><!-- End Page Title -->
     <br>
 
+    <section class="section" id="datasection">
+      <div class="row">
+        <div class="col-lg-12">
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title"></h5>
+              <div id="student_data" style="min-height: 600px;" class="echart"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <section class="section">
       <div class="row">
         <div class="col-lg-12">
@@ -168,7 +181,7 @@
                 <div class="col-lg-3">
                   <h5 class="card-title">Select the Category</h5>
                   <select class="form-select" aria-label="Select a category" id="cat">
-                    <option selected disabled>Select a category</option>
+                    <option selected disabled value="">Select a category</option>
                     <option value="net_0_Friends">net_0_Friends</option>
                     <option value="net_1_Influential">net_1_Influential</option>
                     <option value="net_2_Feedback">net_2_Feedback</option>

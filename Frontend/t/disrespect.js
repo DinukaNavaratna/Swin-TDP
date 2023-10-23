@@ -1,4 +1,6 @@
+var surveynum = ""
 function getdata(survey_num) {
+    surveynum = survey_num;
     $("#survey_num").html("Survey 0" + survey_num + " Analysis");
     var settings = {
         "url": backendURL+"/Tdisrespect",
@@ -138,7 +140,7 @@ function disrespectee_tbl(disrespect) {
 
     var tbl = ""
     for (var row in disrespectee) {
-        tbl += "<tr onclick=\"window.open('student.php?sid="+row+"', '_self')\"><td>" + row + "</td><td>" + disrespectee[row]['fname'] + "</td><td>" + disrespectee[row]['lname'] + "</td><td>" + disrespectee[row]['count'] + "</td></tr>";
+        tbl += "<tr onclick=\"window.open('student.php?sid="+row+"&survey="+surveynum+"', '_self')\"><td>" + row + "</td><td>" + disrespectee[row]['fname'] + "</td><td>" + disrespectee[row]['lname'] + "</td><td>" + disrespectee[row]['count'] + "</td></tr>";
     }
     $("#disrespectee_tbl").html(tbl);
 }
@@ -154,7 +156,7 @@ function disrespecter_tbl(disrespect) {
     }
     var tbl = ""
     for (var row in disrespecter) {
-        tbl += "<tr onclick=\"window.open('student.php?sid="+row+"', '_self')\"><td>" + row + "</td><td>" + disrespecter[row]['fname'] + "</td><td>" + disrespecter[row]['lname'] + "</td><td>" + disrespecter[row]['count'] + "</td></tr>";
+        tbl += "<tr onclick=\"window.open('student.php?sid="+row+"&survey="+surveynum+"', '_self')\"><td>" + row + "</td><td>" + disrespecter[row]['fname'] + "</td><td>" + disrespecter[row]['lname'] + "</td><td>" + disrespecter[row]['count'] + "</td></tr>";
     }
     $("#disrespecter_tbl").html(tbl);
 }
