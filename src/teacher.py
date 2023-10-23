@@ -6,6 +6,7 @@ from loguru import logger
 from faker import Faker
 import json
 import numpy as np
+import sys, os
 
 
 # data source
@@ -284,7 +285,7 @@ class Tstudent(Resource):
             result = {}
             
             sna_student = read_excel(xlsx, sheet_name=str(category))
-            sna_student.drop(sna_student[sna_student['Source'] != sid].index, inplace=True)
+            sna_student.drop(sna_student[(sna_student['Source'] != sid) & (sna_student['Target'] != sid)].index, inplace=True)
         
             result['network'] = (sna_student.values).tolist()
 
@@ -293,9 +294,68 @@ class Tstudent(Resource):
                 resultstring = resultstring.replace("NaN", "0")
                 result = json.loads(resultstring)
         
+            sur = read_excel(xlsx, sheet_name='participants')
+            email = sur.loc[sur['Participant-ID'] == sid, 'Email']
+            
+            if email.count() != 0:
+                try:
+                    email = email.item()
+                    sur1 = read_excel(xlsxJan, sheet_name='participants')
+                    sur2 = read_excel(xlsxJuly, sheet_name='participants')
+                    
+                    eff1 = sur1.loc[sur1['Email'] == email, 'Perc_Effort'].item()
+                    attn1 = sur1.loc[sur1['Email'] == email, 'Attendance'].item()
+                    aca1 = sur1.loc[sur1['Email'] == email, 'Perc_Academic'].item()
+                    
+                    eff2 = sur2.loc[sur2['Email'] == email, 'Perc_Effort'].item()
+                    attn2 = sur2.loc[sur2['Email'] == email, 'Attendance'].item()
+                    aca2 = sur2.loc[sur2['Email'] == email, 'Perc_Academic'].item()
+                
+                    result['data'] = {"email":email, "eff1":eff1, "attn1":attn1, "aca1":aca1, "eff2":eff2, "attn2":attn2, "aca2":aca2}
+                except:
+                    result['data'] = {"email":"error"}
+            else:
+                result['data'] = {"email":"", "eff1":0, "attn1":0, "aca1":0, "eff2":0, "attn2":0, "aca2":0}
+            
             return result
         except Exception as ex:
-            return "failed - "+str(ex)
+            exc_type, exc_obj, exc_tb = sys.exc_info()
+            return "failed (" + str(exc_tb.tb_lineno) + ") - "+str(ex)
+
+
+class Tdata(Resource):
+    def post(self):
+        try:
+            request_body = request.json
+            survey = request_body["survey"]
+            sid = np.int64(request_body["sid"])
+            
+            df, xlsx = dataCleaning(survey, "")        
+        
+            sur = read_excel(xlsx, sheet_name='participants')
+            email = sur.loc[sur['Participant-ID'] == sid, 'Email'].item()
+            
+            sur1 = read_excel(xlsxJan, sheet_name='participants')
+            sur2 = read_excel(xlsxJuly, sheet_name='participants')
+            
+            try:
+                eff1 = sur1.loc[sur1['Email'] == email, 'Perc_Effort'].item()
+                attn1 = sur1.loc[sur1['Email'] == email, 'Attendance'].item()
+                aca1 = sur1.loc[sur1['Email'] == email, 'Perc_Academic'].item()
+                
+                eff2 = sur2.loc[sur2['Email'] == email, 'Perc_Effort'].item()
+                attn2 = sur2.loc[sur2['Email'] == email, 'Attendance'].item()
+                aca2 = sur2.loc[sur2['Email'] == email, 'Perc_Academic'].item()
+                
+                result = {"email":email, "eff1":eff1, "attn1":attn1, "aca1":aca1, "eff2":eff2, "attn2":attn2, "aca2":aca2}
+            except:
+                result = {"email":"error"}
+            
+            
+            return result
+        except Exception as ex:
+            exc_type, exc_obj, exc_tb = sys.exc_info()
+            return "failed (" + str(exc_tb.tb_lineno) + ") - "+str(ex)
 
 
 
